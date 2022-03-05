@@ -1,0 +1,9 @@
+*.iml
+.idea
+docker-compose.yaml
+# Project exclude paths
+/frontend/target/
+/frontend/target/dist/static/js/
+private
+public
+/frontend/node
