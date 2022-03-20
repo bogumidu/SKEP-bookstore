@@ -1,4 +1,4 @@
-package com.bsd.spring.entity;
+package com.bsd.skep.entity;
 
 
 import com.sun.istack.NotNull;

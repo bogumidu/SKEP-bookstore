@@ -1,6 +1,6 @@
-package com.bsd.spring.controller;
+package com.bsd.skep.controller;
 
-import com.bsd.spring.model.ErrorResponse;
+import com.bsd.skep.model.ErrorResponse;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;

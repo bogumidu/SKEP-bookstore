@@ -1,7 +1,7 @@
-package com.bsd.spring.service;
+package com.bsd.skep.service;
 
-import com.bsd.spring.repository.UserRepository;
-import com.bsd.spring.entity.User;
+import com.bsd.skep.repository.UserRepository;
+import com.bsd.skep.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

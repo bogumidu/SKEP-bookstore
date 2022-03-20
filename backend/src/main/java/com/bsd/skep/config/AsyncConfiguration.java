@@ -1,4 +1,4 @@
-package com.bsd.spring.config;
+package com.bsd.skep.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

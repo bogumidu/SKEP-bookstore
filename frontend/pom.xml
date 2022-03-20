@@ -5,7 +5,7 @@
     <artifactId>frontend</artifactId>
 
     <parent>
-        <groupId>com.bsd.spring</groupId>
+        <groupId>com.bsd.skep</groupId>
         <artifactId>main</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>

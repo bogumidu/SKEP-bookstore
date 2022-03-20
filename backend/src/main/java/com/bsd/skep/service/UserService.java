@@ -1,6 +1,6 @@
-package com.bsd.spring.service;
+package com.bsd.skep.service;
 
-import com.bsd.spring.entity.User;
+import com.bsd.skep.entity.User;
 
 import java.util.List;
 import java.util.Optional;

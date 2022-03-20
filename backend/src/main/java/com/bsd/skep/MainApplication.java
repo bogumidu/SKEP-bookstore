@@ -1,4 +1,4 @@
-package com.bsd.spring;
+package com.bsd.skep;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class MainApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);
     }

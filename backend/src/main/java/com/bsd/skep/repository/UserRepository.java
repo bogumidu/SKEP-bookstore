@@ -1,6 +1,6 @@
-package com.bsd.spring.repository;
+package com.bsd.skep.repository;
 
-import com.bsd.spring.entity.User;
+import com.bsd.skep.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

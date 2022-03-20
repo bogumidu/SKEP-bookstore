@@ -1,4 +1,4 @@
-package com.bsd.spring.config;
+package com.bsd.skep.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -10,12 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
-@Profile("!dev")
-public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+@Profile("dev")
+public class DevWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .and()
                 .sessionManagement()
                 .and()
                 .httpBasic()
