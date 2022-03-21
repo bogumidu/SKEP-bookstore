@@ -23,8 +23,8 @@
         </v-toolbar-items>
         <v-spacer></v-spacer>
         <v-toolbar-items>
-          <v-text-field class="accent pt-3 pl-4" single-line></v-text-field>
-          <v-btn icon class="accent">
+          <v-text-field class="secondary pt-3 pl-4" single-line></v-text-field>
+          <v-btn icon class="secondary">
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
         </v-toolbar-items>
@@ -33,7 +33,7 @@
           <v-btn icon @click="$router.push('*')">
             <v-icon>mdi-cart</v-icon>
           </v-btn>
-          <v-btn class="menu-btn accent"
+          <v-btn text class="menu-btn secondary"
                  @click="$router.push('/register')">Register
           </v-btn>
           <v-btn text class="menu-btn"
