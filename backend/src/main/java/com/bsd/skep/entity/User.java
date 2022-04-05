@@ -5,18 +5,15 @@ import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.StringJoiner;
+import java.util.*;
 
 @Entity
-@Table
+@Table(name = "user")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,6 +34,18 @@ public class User implements UserDetails {
 
     @NotNull
     private String role;
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "posted_by_id")
+    private List<Review> postedReviews = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "received_by_id")
+    private List<Review> receivedReviews = new ArrayList<>();
 
     public String getName() {
         return name;
