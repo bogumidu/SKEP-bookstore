@@ -4,12 +4,9 @@ import com.bsd.skep.entity.User;
 import com.bsd.skep.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,9 +18,11 @@ public class UserServiceImpl implements UserService {
     private final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final UserRepository repo;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository repo) {
+    public UserServiceImpl(UserRepository repo, PasswordEncoder passwordEncoder) {
         this.repo = repo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -49,6 +48,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return repo.findAll();
+    }
+
+    @Override
+    public User register(String email, String password) {
+        UserDetails user = loadUserByUsername(email);
+        if (user != null) {
+            return null;
+        }
+        return saveUser(User.builder()
+                .email(email)
+                .password(passwordEncoder.encode(password))
+                .role("USER")
+                .build());
     }
 
     @Override

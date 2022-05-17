@@ -1,6 +1,7 @@
 package com.bsd.skep.service;
 
 import com.bsd.skep.entity.User;
+import com.bsd.skep.model.LoginCredentials;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.UserDetailsManager;
 
@@ -18,4 +19,6 @@ public interface UserService extends UserDetailsService {
     List<User> getUsers();
 
     List<User> getAllUsers();
+
+    User register(String email, String password);
 }

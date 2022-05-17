@@ -1,5 +1,6 @@
 package com.bsd.skep.config;
 
+import com.bsd.skep.model.LoginCredentials;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

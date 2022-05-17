@@ -1,4 +1,4 @@
-package com.bsd.skep.config;
+package com.bsd.skep.model;
 
 
 import lombok.Getter;

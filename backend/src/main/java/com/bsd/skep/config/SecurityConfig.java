@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 import javax.sql.DataSource;
@@ -26,20 +26,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final RestAuthenticationFailureHandler failureHandler;
     private final String secret;
 
+    private final PasswordEncoder passwordEncoder;
+
     public SecurityConfig(DataSource dataSource, UserDetailsService userDetailsService, ObjectMapper objectMapper,
                           RestAuthenticationSuccessHandler successHandler, RestAuthenticationFailureHandler failureHandler,
-                          @Value("${jwt.secret}") String secret) {
+                          @Value("${jwt.secret}") String secret, PasswordEncoder passwordEncoder) {
         this.dataSource = dataSource;
         this.userDetailsService = userDetailsService;
         this.objectMapper = objectMapper;
         this.successHandler = successHandler;
         this.failureHandler = failureHandler;
         this.secret = secret;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
     @Override
@@ -52,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers(("h2-console/**")).permitAll()
+                .antMatchers("/api/auth/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
