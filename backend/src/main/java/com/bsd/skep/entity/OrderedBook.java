@@ -21,6 +21,7 @@ public class OrderedBook {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
     private UUID id;
 
     @ManyToOne

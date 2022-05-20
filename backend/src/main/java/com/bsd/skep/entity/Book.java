@@ -19,6 +19,7 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
     private UUID id;
 
     private String title;
