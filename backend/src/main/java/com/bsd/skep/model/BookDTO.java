@@ -15,9 +15,9 @@ public class BookDTO {
     private String title;
     private String description;
     private String genre;
-    private long creationDate;
+    private Long creationDate;
     private String cover;
-    private int price;
+    private Integer price;
     private AuthorDTO author;
 
     public static BookDTO fromEntity(Book book) {

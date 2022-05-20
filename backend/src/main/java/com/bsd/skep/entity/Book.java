@@ -41,4 +41,6 @@ public class Book {
     @OneToOne(mappedBy = "book")
     private Post post;
 
+    private boolean isUnavailable;
+
 }

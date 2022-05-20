@@ -41,6 +41,43 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findById(id).orElse(null);
     }
 
+    @Override
+    public Book updateBook(UUID id, BookDTO bookDTO) {
+        Book book = bookRepository.findById(id).orElse(null);
+        if (book == null) {
+            return null;
+        }
+        if (bookDTO.getTitle() != null) {
+            book.setTitle(bookDTO.getTitle());
+        }
+        if (bookDTO.getDescription() != null) {
+            book.setDescription(bookDTO.getDescription());
+        }
+        if (bookDTO.getGenre() != null) {
+            book.setGenre(bookDTO.getGenre());
+        }
+        if (bookDTO.getCover() != null) {
+            book.setCover(bookDTO.getCover());
+        }
+        if (bookDTO.getPrice() != null) {
+            book.setPrice(bookDTO.getPrice());
+        }
+        if (bookDTO.getAuthor() != null) {
+            book.setAuthor(authorRepository.findById(bookDTO.getAuthor().getId()).orElse(null));
+        }
+        return bookRepository.save(book);
+    }
+
+    @Override
+    public Book updateBookPrice(UUID id, int price) {
+        Book book = bookRepository.findById(id).orElse(null);
+        if (book == null) {
+            return null;
+        }
+        book.setPrice(price);
+        return bookRepository.save(book);
+    }
+
 //    @Override
 //    public Book createAuthor(AuthorDTO authorDTO) {
 //        return authorRepository.save(Author.builder().firstName(authorDTO.getFirstName()).lastName(authorDTO.getLastName()).build());

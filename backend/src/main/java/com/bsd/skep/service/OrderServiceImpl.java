@@ -4,7 +4,7 @@ import com.bsd.skep.entity.Book;
 import com.bsd.skep.entity.Order;
 import com.bsd.skep.entity.OrderedBook;
 import com.bsd.skep.entity.User;
-import com.bsd.skep.model.CreateOrderDTO;
+import com.bsd.skep.model.OrderDTO;
 import com.bsd.skep.model.OrderedBookDTO;
 import com.bsd.skep.repository.BookRepository;
 import com.bsd.skep.repository.OrderRepository;
@@ -33,14 +33,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order createOrder(CreateOrderDTO createOrderDTO) {
-        List<Book> books = bookRepository.findByIds(createOrderDTO.getCart()
+    public Order createOrder(OrderDTO orderDTO) {
+        List<Book> books = bookRepository.findByIds(orderDTO.getCart()
                 .stream().map(OrderedBookDTO::getId).collect(Collectors.toList()));
-        if (books.size() != createOrderDTO.getCart().size()) {
+        if (books.size() != orderDTO.getCart().size()) {
             throw new IllegalArgumentException("Invalid book id");
         }
         List<OrderedBook> orderedBooks = books.stream().map(book -> orderedBookRepository.save(OrderedBook.builder()
-                .quantity(createOrderDTO.getCart().stream()
+                .quantity(orderDTO.getCart().stream()
                         .filter(orderedBookDTO -> orderedBookDTO.getId().equals(book.getId())).findFirst().orElseThrow().getQuantity())
                 .price(book.getPrice())
                 .product(book)
@@ -57,9 +57,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateOrderStatus(UUID orderId, OrderStatus orderStatus) {
+    public Order updateOrderStatus(UUID orderId, OrderStatus orderStatus) {
         Order order = orderRepository.findById(orderId).orElseThrow();
         order.setStatus(orderStatus);
-        orderRepository.save(order);
+        return orderRepository.save(order);
+    }
+
+    @Override
+    public Order getOrder(UUID orderId) {
+        return orderRepository.findById(orderId).orElseThrow();
     }
 }
