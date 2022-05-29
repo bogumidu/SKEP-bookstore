@@ -1,11 +1,11 @@
 package com.bsd.skep.controller;
 
 import com.bsd.skep.model.AuthorDTO;
+import com.bsd.skep.model.AuthorListDTO;
 import com.bsd.skep.service.AuthorService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -30,9 +30,16 @@ public class AuthorController {
 //        return AuthorDTO.fromEntity(authorService.getAllAuthor());
 //    }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{id}")
     public AuthorDTO getAuthor(@PathVariable("id") UUID id) {
-        return AuthorDTO.fromEntity(authorService.findAuthor(id));
+        return AuthorDTO.fromEntity(authorService.getAuthor(id));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/")
+    public AuthorListDTO getAllAuthors() {
+        return AuthorListDTO.fromList(authorService.getAllAuthors());
     }
 
 }

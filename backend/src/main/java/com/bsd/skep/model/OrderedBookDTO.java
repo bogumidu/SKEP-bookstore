@@ -24,4 +24,8 @@ public class OrderedBookDTO {
         return new OrderedBookDTO(orderedBook.getQuantity(), orderedBook.getPrice(), BookDTO.fromEntity(orderedBook.getProduct()));
     }
 
+    public static UUID getBookId(OrderedBookDTO orderedBookDTO) {
+        return orderedBookDTO.getBook().getId();
+    }
+
 }

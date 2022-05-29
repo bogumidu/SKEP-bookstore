@@ -5,6 +5,7 @@ import com.bsd.skep.model.AuthorDTO;
 import com.bsd.skep.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,8 +23,12 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author findAuthor(UUID id) {
+    public Author getAuthor(UUID id) {
         return authorRepository.findById(id).orElse(null);
+    }
+
+    public List<Author> getAllAuthors() {
+        return (List<Author>) authorRepository.findAll();
     }
 
     @Override
