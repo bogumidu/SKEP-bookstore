@@ -35,13 +35,13 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public Order createOrder(OrderDTO orderDTO) {
         List<Book> books = bookRepository.findByIds(orderDTO.getCart()
-                .stream().map(OrderedBookDTO::getId).collect(Collectors.toList()));
+                .stream().map(OrderedBookDTO::getBookId).collect(Collectors.toList()));
         if (books.size() != orderDTO.getCart().size()) {
             throw new IllegalArgumentException("Invalid book id");
         }
         List<OrderedBook> orderedBooks = books.stream().map(book -> orderedBookRepository.save(OrderedBook.builder()
                 .quantity(orderDTO.getCart().stream()
-                        .filter(orderedBookDTO -> orderedBookDTO.getId().equals(book.getId())).findFirst().orElseThrow().getQuantity())
+                        .filter(orderedBookDTO -> orderedBookDTO.getBook().getId().equals(book.getId())).findFirst().orElseThrow().getQuantity())
                 .price(book.getPrice())
                 .product(book)
                 .build())).collect(Collectors.toList());
