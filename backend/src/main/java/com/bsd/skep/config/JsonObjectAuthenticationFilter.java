@@ -23,6 +23,7 @@ public class JsonObjectAuthenticationFilter extends UsernamePasswordAuthenticati
     private String secret;
 
     public JsonObjectAuthenticationFilter(ObjectMapper objectMapper, String secret) {
+        setFilterProcessesUrl("/api/auth/login");
         this.objectMapper = objectMapper;
         this.secret = secret;
     }
@@ -45,7 +46,9 @@ public class JsonObjectAuthenticationFilter extends UsernamePasswordAuthenticati
                     .withIssuedAt(new Date())
                     .withSubject(authRequest.getUsername())
                     .sign(Algorithm.HMAC512(secret));
-            response.addCookie(new Cookie("token", signed));
+            Cookie cookie = new Cookie("token", signed);
+            cookie.setPath("/");
+            response.addCookie(cookie);
             return authenticate;
         } catch (IOException e) {
             throw new IllegalArgumentException(e.getMessage());

@@ -8,6 +8,8 @@ import com.bsd.skep.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @RestController()
@@ -44,6 +46,15 @@ public class AuthController {
         User user = userService.getUserByEmail(username).orElseThrow();
         user.setRole(role);
         userService.saveUser(user);
+        return true;
+    }
+
+    @PostMapping("/logout")
+    public boolean logout(HttpServletResponse response) {
+        Cookie token = new Cookie("token", "");
+        token.setPath("/");
+        token.setMaxAge(0);
+        response.addCookie(token);
         return true;
     }
 

@@ -29,7 +29,7 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public OrderDTO updateOrderStatus(@PathVariable("id") UUID id, @RequestParam OrderStatus status) {
         return OrderDTO.fromEntity(orderService.updateOrderStatus(id, status));
     }

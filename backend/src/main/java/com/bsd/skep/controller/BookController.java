@@ -36,11 +36,13 @@ public class BookController {
         return BookDTO.fromEntity(bookService.findBook(id));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public BookDTO updateBook(@PathVariable UUID id, @RequestBody BookDTO bookDTO) {
         return BookDTO.fromEntity(bookService.updateBook(id, bookDTO));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}/price")
     public BookDTO updateBookPrice(@PathVariable UUID id, @RequestParam int price) {
         return BookDTO.fromEntity(bookService.updateBookPrice(id, price));
