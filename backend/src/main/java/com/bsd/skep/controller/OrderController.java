@@ -1,5 +1,6 @@
 package com.bsd.skep.controller;
 
+import com.bsd.skep.model.ApiResponse;
 import com.bsd.skep.model.OrderDTO;
 import com.bsd.skep.service.OrderService;
 import com.bsd.skep.util.OrderStatus;
@@ -19,19 +20,19 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public OrderDTO createOrder(@RequestBody OrderDTO orderDTO) {
-        return OrderDTO.fromEntity(orderService.createOrder(orderDTO));
+    public ApiResponse<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
+        return new ApiResponse<>(OrderDTO.fromEntity(orderService.createOrder(orderDTO)));
     }
 
     @GetMapping("/{id}")
-    public OrderDTO getOrder(@PathVariable("id") UUID id) {
-        return OrderDTO.fromEntity(orderService.getOrder(id));
+    public ApiResponse<OrderDTO> getOrder(@PathVariable("id") UUID id) {
+        return new ApiResponse<>(OrderDTO.fromEntity(orderService.getOrder(id)));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public OrderDTO updateOrderStatus(@PathVariable("id") UUID id, @RequestParam OrderStatus status) {
-        return OrderDTO.fromEntity(orderService.updateOrderStatus(id, status));
+    public ApiResponse<OrderDTO> updateOrderStatus(@PathVariable("id") UUID id, @RequestParam OrderStatus status) {
+        return new ApiResponse<>(OrderDTO.fromEntity(orderService.updateOrderStatus(id, status)));
     }
 
 }

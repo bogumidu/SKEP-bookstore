@@ -15,13 +15,10 @@ public interface BookService {
 
      Book findBook(UUID id);
 
-
      Book updateBook(UUID id, BookDTO bookDTO);
 
+     Book updateBookPrice(UUID id, BookDTO bookDTO);
 
-     Book updateBookPrice(UUID id, int price);
-
-
-
+     List<Book> findBookByQuery(String query);
 
 }

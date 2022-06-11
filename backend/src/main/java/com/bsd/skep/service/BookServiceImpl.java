@@ -2,12 +2,14 @@ package com.bsd.skep.service;
 
 import com.bsd.skep.entity.Author;
 import com.bsd.skep.entity.Book;
-import com.bsd.skep.model.AuthorDTO;
 import com.bsd.skep.model.BookDTO;
 import com.bsd.skep.repository.AuthorRepository;
 import com.bsd.skep.repository.BookRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -15,37 +17,57 @@ public class BookServiceImpl implements BookService {
 
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
+    private final LuceneService luceneService;
 
-    public BookServiceImpl(AuthorRepository authorRepository, BookRepository bookRepository) {
+    public BookServiceImpl(AuthorRepository authorRepository, BookRepository bookRepository, LuceneService luceneService) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
+        this.luceneService = luceneService;
     }
 
     @Override
     public Book createBook(BookDTO bookDTO) {
         Author author = authorRepository.findById(bookDTO.getAuthor().getId()).orElse(null);
         if (author == null) {
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Author not found");
         }
-        return bookRepository.save(Book.builder().title(bookDTO.getTitle())
+        List<Book> books = (List<Book>) bookRepository.findAll();
+        for (Book book : books) {
+            if (book.getTitle().equals(bookDTO.getTitle()) &&
+                    book.getAuthor().getId().equals(bookDTO.getAuthor().getId())) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Book already exists");
+            }
+        }
+        Book book = bookRepository.save(Book.builder().title(bookDTO.getTitle())
                 .description(bookDTO.getDescription())
                 .genre(bookDTO.getGenre())
-                .creationDate(bookDTO.getCreationDate())
+                .creationDate(System.currentTimeMillis())
                 .cover(bookDTO.getCover())
                 .price(bookDTO.getPrice())
                 .author(author).build());
+        try {
+            luceneService.createBook(book);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Lucene: Error while indexing book");
+        }
+        return book;
     }
 
     @Override
     public Book findBook(UUID id) {
-        return bookRepository.findById(id).orElse(null);
+        Book book = bookRepository.findById(id).orElse(null);
+        if (book == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
+        }
+        return book;
     }
 
     @Override
     public Book updateBook(UUID id, BookDTO bookDTO) {
         Book book = bookRepository.findById(id).orElse(null);
         if (book == null) {
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
         }
         if (bookDTO.getTitle() != null) {
             book.setTitle(bookDTO.getTitle());
@@ -63,43 +85,43 @@ public class BookServiceImpl implements BookService {
             book.setPrice(bookDTO.getPrice());
         }
         if (bookDTO.getAuthor() != null) {
-            book.setAuthor(authorRepository.findById(bookDTO.getAuthor().getId()).orElse(null));
+            Author author = authorRepository.findById(bookDTO.getAuthor().getId()).orElse(null);
+            if (author == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Author not found");
+            }
+            book.setAuthor(author);
         }
+        book = bookRepository.save(book);
+        try {
+            luceneService.updateBook(book);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Lucene: Error while indexing book");
+        }
+        return book;
+    }
+
+    @Override
+    public Book updateBookPrice(UUID id, BookDTO bookDTO) {
+        Book book = bookRepository.findById(id).orElse(null);
+        if (book == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
+        }
+        book.setPrice(bookDTO.getPrice());
         return bookRepository.save(book);
     }
 
     @Override
-    public Book updateBookPrice(UUID id, int price) {
-        Book book = bookRepository.findById(id).orElse(null);
-        if (book == null) {
-            return null;
+    public List<Book> findBookByQuery(String query) {
+        if (query == null) {
+            // TODO: find by newest books
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Query is null");
         }
-        book.setPrice(price);
-        return bookRepository.save(book);
+        try {
+            return luceneService.searchBook(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Lucene: Error while searching book");
+        }
     }
-
-//    @Override
-//    public Book createAuthor(AuthorDTO authorDTO) {
-//        return authorRepository.save(Author.builder().firstName(authorDTO.getFirstName()).lastName(authorDTO.getLastName()).build());
-//    }
-//
-//    @Override
-//    public Author findAuthor(UUID id) {
-//        return authorRepository.findById(id).orElse(null);
-//    }
-//
-//    @Override
-//    public Author updateAuthor(UUID id, String firstName, String lastName) {
-//        Author author = authorRepository.findById(id).orElse(null);
-//        if (author != null) {
-//            if (firstName != null) {
-//                author.setFirstName(firstName);
-//            }
-//            if (lastName != null) {
-//                author.setLastName(lastName);
-//            }
-//            return authorRepository.save(author);
-//        }
-//        return null;
-//    }
 }

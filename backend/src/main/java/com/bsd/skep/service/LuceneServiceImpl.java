@@ -75,7 +75,6 @@ public class LuceneServiceImpl implements LuceneService {
     @Override
     public void createBook(Book book) throws IOException {
         Document doc = toDocument(book);
-
         indexWriter.addDocument(doc);
         indexWriter.commit();
     }

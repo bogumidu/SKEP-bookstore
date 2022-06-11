@@ -1,6 +1,7 @@
 package com.bsd.skep.controller;
 
 import com.bsd.skep.entity.Book;
+import com.bsd.skep.model.ApiResponse;
 import com.bsd.skep.model.BookDTO;
 import com.bsd.skep.model.BookListDTO;
 import com.bsd.skep.service.BookService;
@@ -18,47 +19,37 @@ import java.util.stream.Collectors;
 public class BookController {
 
     private final BookService bookService;
-    private final LuceneService luceneService;
 
-    public BookController(BookService bookService, LuceneService luceneService) {
+    public BookController(BookService bookService) {
         this.bookService = bookService;
-        this.luceneService = luceneService;
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/")
-    public BookDTO book(@RequestBody BookDTO bookDTO) {
-        return BookDTO.fromEntity(bookService.createBook(bookDTO));
+    public ApiResponse<BookDTO> book(@RequestBody BookDTO bookDTO) {
+        return new ApiResponse<>(BookDTO.fromEntity(bookService.createBook(bookDTO)));
     }
 
     @GetMapping("/{id}")
-    public BookDTO getBook(@PathVariable UUID id) {
-        return BookDTO.fromEntity(bookService.findBook(id));
+    public ApiResponse<BookDTO> getBook(@PathVariable UUID id) {
+        return new ApiResponse<>(BookDTO.fromEntity(bookService.findBook(id)));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
-    public BookDTO updateBook(@PathVariable UUID id, @RequestBody BookDTO bookDTO) {
-        return BookDTO.fromEntity(bookService.updateBook(id, bookDTO));
+    public ApiResponse<BookDTO> updateBook(@PathVariable UUID id, @RequestBody BookDTO bookDTO) {
+        return new ApiResponse<>(BookDTO.fromEntity(bookService.updateBook(id, bookDTO)));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/{id}/price")
-    public BookDTO updateBookPrice(@PathVariable UUID id, @RequestParam int price) {
-        return BookDTO.fromEntity(bookService.updateBookPrice(id, price));
+    @PatchMapping("/{id}")
+    public ApiResponse<BookDTO> updateBookPrice(@PathVariable UUID id, @RequestBody BookDTO bookDTO) {
+        return new ApiResponse<>(BookDTO.fromEntity(bookService.updateBookPrice(id, bookDTO)));
     }
 
     @GetMapping("/")
-    public BookListDTO getBookByQuery(String query) {
-        if (query == null) {
-            return null;
-        }
-        try {
-            return BookListDTO.fromList(luceneService.searchBook(query));
-        } catch (QueryNodeException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public ApiResponse<BookListDTO> getBookByQuery(String query) {
+        return new ApiResponse<>(BookListDTO.fromList(bookService.findBookByQuery(query)));
     }
 
 }

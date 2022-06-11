@@ -15,6 +15,6 @@ public interface AuthorService {
 
      List<Author> getAllAuthors();
 
-     Author updateAuthor(UUID id, String firstName, String lastName);
+     Author updateAuthor(UUID id, AuthorDTO authorDTO);
 
 }

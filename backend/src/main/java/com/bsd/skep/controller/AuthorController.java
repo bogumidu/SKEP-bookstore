@@ -1,5 +1,6 @@
 package com.bsd.skep.controller;
 
+import com.bsd.skep.model.ApiResponse;
 import com.bsd.skep.model.AuthorDTO;
 import com.bsd.skep.model.AuthorListDTO;
 import com.bsd.skep.service.AuthorService;
@@ -20,26 +21,20 @@ public class AuthorController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/")
-    public AuthorDTO createAuthor(@RequestBody AuthorDTO authorDTO) {
-        return AuthorDTO.fromEntity(authorService.createAuthor(authorDTO));
+    public ApiResponse<AuthorDTO> createAuthor(@RequestBody AuthorDTO authorDTO) {
+        return new ApiResponse<>(AuthorDTO.fromEntity(authorService.createAuthor(authorDTO)));
     }
-
-//    @PreAuthorize("hasAuthority('ADMIN')")
-//    @GetMapping()
-//    public List<AuthorDTO> getAllAuthor() {
-//        return AuthorDTO.fromEntity(authorService.getAllAuthor());
-//    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{id}")
-    public AuthorDTO getAuthor(@PathVariable("id") UUID id) {
-        return AuthorDTO.fromEntity(authorService.getAuthor(id));
+    public ApiResponse<AuthorDTO> getAuthor(@PathVariable("id") UUID id) {
+        return new ApiResponse<>(AuthorDTO.fromEntity(authorService.getAuthor(id)));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/")
-    public AuthorListDTO getAllAuthors() {
-        return AuthorListDTO.fromList(authorService.getAllAuthors());
+    public ApiResponse<AuthorListDTO> getAllAuthors() {
+        return new ApiResponse<>(AuthorListDTO.fromList(authorService.getAllAuthors()));
     }
 
 }

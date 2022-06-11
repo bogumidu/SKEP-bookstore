@@ -2,6 +2,7 @@ package com.bsd.skep.controller;
 
 
 import com.bsd.skep.entity.User;
+import com.bsd.skep.model.ApiResponse;
 import com.bsd.skep.model.AuthDTO;
 import com.bsd.skep.model.LoginCredentials;
 import com.bsd.skep.service.UserService;
@@ -30,32 +31,32 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public AuthDTO register(@RequestBody LoginCredentials credentials) {
+    public ApiResponse<AuthDTO> register(@RequestBody LoginCredentials credentials) {
         User user = userService.register(credentials.getUsername(), credentials.getPassword());
         if (user == null) {
-            return new AuthDTO(false, "Username already exists");
+            return new ApiResponse<>(new AuthDTO(false, "Username already exists"));
         }
-        return new AuthDTO(user.getUsername());
+        return new ApiResponse<>(new AuthDTO(user.getUsername()));
     }
 
     @PostMapping("/role")
-    public boolean role(@RequestParam("username") String username, @RequestParam("role") String role, @RequestParam("magic") String magic) {
+    public ApiResponse<Void> role(@RequestParam("username") String username, @RequestParam("role") String role, @RequestParam("magic") String magic) {
         if (!magic.equals(this.magic)) {
-            return false;
+            return new ApiResponse<>(false, null);
         }
         User user = userService.getUserByEmail(username).orElseThrow();
         user.setRole(role);
         userService.saveUser(user);
-        return true;
+        return new ApiResponse<>(true, null);
     }
 
     @PostMapping("/logout")
-    public boolean logout(HttpServletResponse response) {
+    public ApiResponse<Void> logout(HttpServletResponse response) {
         Cookie token = new Cookie("token", "");
         token.setPath("/");
         token.setMaxAge(0);
         response.addCookie(token);
-        return true;
+        return new ApiResponse<>(true, null);
     }
 
 }
