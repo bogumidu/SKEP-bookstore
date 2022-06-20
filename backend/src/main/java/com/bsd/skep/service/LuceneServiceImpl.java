@@ -98,10 +98,13 @@ public class LuceneServiceImpl implements LuceneService {
 
     private Document toDocument(Book book) {
         Document doc = new Document();
-        doc.add(new StringField("type", "flat", Field.Store.YES));
+        doc.add(new StringField("type", "book", Field.Store.YES));
         doc.add(new StringField("id", book.getId().toString(), Field.Store.YES));
         doc.add(new StringField("title", book.getTitle().toLowerCase(Locale.ROOT), Field.Store.YES));
-        doc.add(new StringField("genre", book.getGenre().toLowerCase(Locale.ROOT), Field.Store.YES));
+        doc.add(new StringField("author", (book.getAuthor().getFirstName() + " " + book.getAuthor().getLastName()).toLowerCase(Locale.ROOT), Field.Store.YES));
+        if (book.getGenre() != null) {
+            doc.add(new StringField("genre", book.getGenre().toLowerCase(Locale.ROOT), Field.Store.YES));
+        }
         doc.add(new IntPoint("price", book.getPrice()));
         return doc;
     }

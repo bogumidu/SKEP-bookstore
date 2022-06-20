@@ -15,6 +15,8 @@ public interface BookService {
 
      Book findBook(UUID id);
 
+     List<Book> findBooksByIds(List<UUID> ids);
+
      Book updateBook(UUID id, BookDTO bookDTO);
 
      Book updateBookPrice(UUID id, BookDTO bookDTO);

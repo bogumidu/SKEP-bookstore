@@ -29,7 +29,7 @@ public class OrderController {
         return new ApiResponse<>(OrderDTO.fromEntity(orderService.getOrder(id)));
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<OrderDTO> updateOrderStatus(@PathVariable("id") UUID id, @RequestParam OrderStatus status) {
         return new ApiResponse<>(OrderDTO.fromEntity(orderService.updateOrderStatus(id, status)));

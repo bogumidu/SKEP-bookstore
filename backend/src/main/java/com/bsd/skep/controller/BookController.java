@@ -15,7 +15,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/book")
+@RequestMapping("/api/book")
 public class BookController {
 
     private final BookService bookService;
@@ -25,7 +25,7 @@ public class BookController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/")
+    @PostMapping
     public ApiResponse<BookDTO> book(@RequestBody BookDTO bookDTO) {
         return new ApiResponse<>(BookDTO.fromEntity(bookService.createBook(bookDTO)));
     }
@@ -33,6 +33,11 @@ public class BookController {
     @GetMapping("/{id}")
     public ApiResponse<BookDTO> getBook(@PathVariable UUID id) {
         return new ApiResponse<>(BookDTO.fromEntity(bookService.findBook(id)));
+    }
+
+    @GetMapping("list/{ids}")
+    public ApiResponse<BookListDTO> getBooks(@PathVariable List<UUID> ids) {
+        return new ApiResponse<>(BookListDTO.fromList(bookService.findBooksByIds(ids)));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -47,7 +52,7 @@ public class BookController {
         return new ApiResponse<>(BookDTO.fromEntity(bookService.updateBookPrice(id, bookDTO)));
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ApiResponse<BookListDTO> getBookByQuery(String query) {
         return new ApiResponse<>(BookListDTO.fromList(bookService.findBookByQuery(query)));
     }

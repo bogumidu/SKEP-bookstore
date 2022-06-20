@@ -64,6 +64,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<Book> findBooksByIds(List<UUID> ids) {
+        List<Book> books = bookRepository.findByIds(ids);
+        if (books == null || books.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
+        }
+        return books;
+    }
+
+    @Override
     public Book updateBook(UUID id, BookDTO bookDTO) {
         Book book = bookRepository.findById(id).orElse(null);
         if (book == null) {
