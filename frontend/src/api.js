@@ -105,6 +105,18 @@ export default {
             headers: {'Content-Type': 'application/json'},
         })
     },
+    getBooksByGenre(genre) {
+        return AXIOS.get(`/book/genre/${genre}`, {
+            withCredentials: true,
+            headers: {'Content-Type': 'application/json'}
+        })
+    },
+    getBooksLast10() {
+        return AXIOS.get(`/book/last10`, {
+            withCredentials: true,
+            headers: {'Content-Type': 'application/json'}
+        })
+    },
     searchBooks(query) {
         return AXIOS.get(`/book?query=${encodeURIComponent(query + '~4 OR author:' + query + '~4 OR *' + query + '* OR author:*' + query + '*')}`, {
             withCredentials: true,

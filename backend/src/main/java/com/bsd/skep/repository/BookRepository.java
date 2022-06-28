@@ -12,4 +12,6 @@ public interface BookRepository extends CrudRepository<Book, UUID> {
     @Query("SELECT b FROM Book b WHERE b.id in :ids")
     List<Book> findByIds(List<UUID> ids);
 
+    List<Book> findBookByGenre(String genre);
+
 }

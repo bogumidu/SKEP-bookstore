@@ -12,8 +12,9 @@ const Cart = (function () {
         return this._assets.length === 0;
     };
     Cart.prototype.addItem = function (item) {
-        if (this._assets.find(function (i) { return i.id === item.id; })) {
-            //TODO: increment quantity
+        let existingItem = this._assets.find(function (i) { return i.id === item.id; });
+        if (existingItem) {
+            existingItem.quantity += item.quantity;
             return;
         }
         this._assets.push(item);

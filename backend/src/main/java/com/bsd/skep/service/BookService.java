@@ -15,7 +15,11 @@ public interface BookService {
 
      Book findBook(UUID id);
 
+     List<Book> getAllBooks();
+
      List<Book> findBooksByIds(List<UUID> ids);
+
+     List<Book> findBooksByGenre(String genre);
 
      Book updateBook(UUID id, BookDTO bookDTO);
 

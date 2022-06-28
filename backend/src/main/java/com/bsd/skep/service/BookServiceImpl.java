@@ -31,6 +31,12 @@ public class BookServiceImpl implements BookService {
         if (author == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Author not found");
         }
+        if (bookDTO.getGenre() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Genre is required");
+        }
+        if (bookDTO.getPrice() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Price is required");
+        }
         List<Book> books = (List<Book>) bookRepository.findAll();
         for (Book book : books) {
             if (book.getTitle().equals(bookDTO.getTitle()) &&
@@ -40,7 +46,7 @@ public class BookServiceImpl implements BookService {
         }
         Book book = bookRepository.save(Book.builder().title(bookDTO.getTitle())
                 .description(bookDTO.getDescription())
-                .genre(bookDTO.getGenre())
+                .genre(bookDTO.getGenre().toLowerCase())
                 .creationDate(System.currentTimeMillis())
                 .cover(bookDTO.getCover())
                 .price(bookDTO.getPrice())
@@ -64,12 +70,26 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<Book> getAllBooks() {
+        List<Book> books = (List<Book>) bookRepository.findAll();
+        if (books.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Books not found");
+        }
+        return books;
+    }
+
+    @Override
     public List<Book> findBooksByIds(List<UUID> ids) {
         List<Book> books = bookRepository.findByIds(ids);
         if (books == null || books.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
         }
         return books;
+    }
+
+    @Override
+    public List<Book> findBooksByGenre(String genre) {
+        return bookRepository.findBookByGenre(genre.toLowerCase());
     }
 
     @Override

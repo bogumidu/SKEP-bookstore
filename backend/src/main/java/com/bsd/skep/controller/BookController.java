@@ -30,6 +30,12 @@ public class BookController {
         return new ApiResponse<>(BookDTO.fromEntity(bookService.createBook(bookDTO)));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/all")
+    public ApiResponse<BookListDTO> getBooks() {
+        return new ApiResponse<>(BookListDTO.fromList(bookService.getAllBooks()));
+    }
+
     @GetMapping("/{id}")
     public ApiResponse<BookDTO> getBook(@PathVariable UUID id) {
         return new ApiResponse<>(BookDTO.fromEntity(bookService.findBook(id)));
@@ -38,6 +44,11 @@ public class BookController {
     @GetMapping("list/{ids}")
     public ApiResponse<BookListDTO> getBooks(@PathVariable List<UUID> ids) {
         return new ApiResponse<>(BookListDTO.fromList(bookService.findBooksByIds(ids)));
+    }
+
+    @GetMapping("/genre/{genre}")
+    public ApiResponse<BookListDTO> getBooksByGenre(@PathVariable String genre) {
+        return new ApiResponse<>(BookListDTO.fromList(bookService.findBooksByGenre(genre)));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
