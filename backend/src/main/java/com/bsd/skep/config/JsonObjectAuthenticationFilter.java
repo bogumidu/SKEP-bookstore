@@ -30,6 +30,14 @@ public class JsonObjectAuthenticationFilter extends UsernamePasswordAuthenticati
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        if (!"POST".equals(request.getMethod())) {
+            throw new AuthenticationException("Authentication method not allowed: " + request.getMethod()) {
+                @Override
+                public String getMessage() {
+                    return "Authentication method not allowed: " + request.getMethod();
+                }
+            };
+        }
         try {
             BufferedReader reader = request.getReader();
             StringBuilder sb = new StringBuilder();

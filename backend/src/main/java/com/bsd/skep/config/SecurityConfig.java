@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.web.filter.CorsFilter;
 
 import javax.sql.DataSource;
 
@@ -28,18 +29,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final RestAuthenticationSuccessHandler successHandler;
     private final RestAuthenticationFailureHandler failureHandler;
     private final String secret;
+    private final CorsFilter corsFilter;
 
     private final PasswordEncoder passwordEncoder;
 
     public SecurityConfig(DataSource dataSource, UserDetailsService userDetailsService, ObjectMapper objectMapper,
                           RestAuthenticationSuccessHandler successHandler, RestAuthenticationFailureHandler failureHandler,
-                          @Value("${jwt.secret}") String secret, PasswordEncoder passwordEncoder) {
+                          @Value("${jwt.secret}") String secret, CorsFilter corsFilter, PasswordEncoder passwordEncoder) {
         this.dataSource = dataSource;
         this.userDetailsService = userDetailsService;
         this.objectMapper = objectMapper;
         this.successHandler = successHandler;
         this.failureHandler = failureHandler;
         this.secret = secret;
+        this.corsFilter = corsFilter;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -64,6 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .addFilter(corsFilter)
                 .addFilter(authenticationFilter())
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), userDetailsService, secret))
                 .exceptionHandling()

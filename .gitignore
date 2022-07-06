@@ -7,3 +7,4 @@ docker-compose.yaml
 private
 public
 /frontend/node
+lucene
