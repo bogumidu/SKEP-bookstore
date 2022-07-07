@@ -5,7 +5,9 @@ import com.bsd.skep.entity.User;
 import com.bsd.skep.model.ApiResponse;
 import com.bsd.skep.model.AuthDTO;
 import com.bsd.skep.model.LoginCredentials;
+import com.bsd.skep.model.UserDTO;
 import com.bsd.skep.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -28,6 +30,12 @@ public class AuthController {
     public void init() {
         magic = UUID.randomUUID().toString();
         System.out.println("Magic: " + magic);
+    }
+
+    @GetMapping("/user")
+    public ApiResponse<UserDTO> getUser() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        return new ApiResponse<>(UserDTO.fromUser(user));
     }
 
     @PostMapping("/register")

@@ -31,6 +31,12 @@ export default {
             headers: {'Content-Type': 'application/json'}
         })
     },
+    getUser() {
+        return AXIOS.get(`auth/user`, {
+            withCredentials: true,
+            headers: {'Content-Type': 'application/json'}
+        })
+    },
     // Author
     createAuthor(firstName, lastName) {
         return AXIOS.post(`/author`, JSON.stringify({
@@ -99,8 +105,15 @@ export default {
         })
     },
     getBooksByIds(ids) {
+        if (ids.length === 0) {
+            return Promise.resolve({
+                data: {
+                    data: []
+                }
+            })
+        }
         let idsString = ids.join(',')
-        return AXIOS.get(`/book/${idsString}`, {
+        return AXIOS.get(`/book/list/${idsString}`, {
             withCredentials: true,
             headers: {'Content-Type': 'application/json'},
         })
@@ -118,7 +131,7 @@ export default {
         })
     },
     searchBooks(query) {
-        return AXIOS.get(`/book?query=${encodeURIComponent(query + '~4 OR author:' + query + '~4 OR *' + query + '* OR author:*' + query + '*')}`, {
+        return AXIOS.get(`/book?query=${encodeURIComponent(query + '~4 OR author:' + query + '~4 OR ' + query + '* OR author:' + query + '*')}`, {
             withCredentials: true,
             headers: {'Content-Type': 'application/json'}
         })

@@ -21,14 +21,14 @@
         </v-menu>
       </v-toolbar-items>
       <v-toolbar-items>
-        <v-text-field class="secondary pt-3 pl-4" single-line></v-text-field>
-        <v-btn icon class="secondary">
+        <v-text-field class="secondary pt-3 pl-4" single-line v-model="query" label="Search"></v-text-field>
+        <v-btn icon class="secondary" :to="{name: 'search', params: {query: query}}">
           <v-icon>mdi-magnify</v-icon>
         </v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
-      <v-toolbar-items>
-        <v-btn icon @click="$router.push('*')">
+      <v-toolbar-items v-if="!authenticated">
+        <v-btn icon @click="$router.push('/cart')">
           <v-icon>mdi-cart</v-icon>
         </v-btn>
         <v-btn text class="menu-btn secondary"
@@ -36,6 +36,17 @@
         </v-btn>
         <v-btn text class="menu-btn"
                @click="$router.push('/login')">Login
+        </v-btn>
+      </v-toolbar-items>
+      <v-toolbar-items v-else-if="authenticated">
+        <v-btn icon @click="$router.push('*')">
+          <v-icon>mdi-cart</v-icon>
+        </v-btn>
+        <v-btn text class="menu-btn secondary"
+               @click="$router.push('/')">My orders
+        </v-btn>
+        <v-btn text class="menu-btn"
+               @click="logout">Logout
         </v-btn>
       </v-toolbar-items>
     </v-app-bar>
@@ -71,12 +82,15 @@
 </style>
 
 <script>
+import api from "../api";
 
 export default {
   components: {},
   name: 'Wrapper',
   data() {
     return {
+      authenticated: false,
+      query: '',
       error: null,
       categories: [
         {title: 'Horror'},
@@ -87,8 +101,21 @@ export default {
     }
   },
   mounted() {
+    this.isAuthenticated();
   },
-  methods: {},
+  methods: {
+    isAuthenticated() {
+      this.authenticated = !!this.$store.getters.getUser;
+    },
+    logout() {
+      this.authenticated = false;
+      api.logout();
+      if (this.$route.fullPath !== '/') {
+        this.$router.push('/');
+      }
+      this.$store.commit('no_user');
+    }
+  },
   computed: {
     theme() {
       return this.$vuetify.theme.dark ? 'dark' : 'light'
