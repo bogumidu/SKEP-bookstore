@@ -131,7 +131,19 @@ export default {
         })
     },
     searchBooks(query) {
+        if (query === '') {
+            return AXIOS.get(`/book/all`, {
+                withCredentials: true,
+                headers: {'Content-Type': 'application/json'}
+            })
+        }
         return AXIOS.get(`/book?query=${encodeURIComponent(query + '~4 OR author:' + query + '~4 OR ' + query + '* OR author:' + query + '*')}`, {
+            withCredentials: true,
+            headers: {'Content-Type': 'application/json'}
+        })
+    },
+    getAllBooks() {
+        return AXIOS.get(`/book/all`, {
             withCredentials: true,
             headers: {'Content-Type': 'application/json'}
         })

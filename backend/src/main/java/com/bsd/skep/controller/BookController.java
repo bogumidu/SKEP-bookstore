@@ -30,7 +30,6 @@ public class BookController {
         return new ApiResponse<>(BookDTO.fromEntity(bookService.createBook(bookDTO)));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all")
     public ApiResponse<BookListDTO> getBooks() {
         return new ApiResponse<>(BookListDTO.fromList(bookService.getAllBooks()));

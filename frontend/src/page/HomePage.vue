@@ -7,9 +7,7 @@
     </v-row>
     <v-row>
       <v-col v-for="(book, index) in horror" v-bind:key="index" cols="2">
-        <v-card
-            class="mx-auto"
-        >
+        <v-card class="mx-auto">
           <v-img
               height="400"
               style="cursor: pointer"
@@ -30,11 +28,7 @@
             {{ book.description }}
           </v-card-text>
           <v-card-actions class="justify-end">
-            <v-btn
-                color="deep-purple lighten-2 float-right"
-                text
-                @click="addToCart(book)"
-            >
+            <v-btn color="deep-purple lighten-2 float-right" text @click="addToCart(book)">
               <v-icon left>
                 mdi-cart
               </v-icon>
@@ -44,9 +38,7 @@
         </v-card>
       </v-col>
       <v-col cols="2">
-        <v-card
-            class="mx-auto fill-height"
-        >
+        <v-card class="mx-auto fill-height">
           <v-card-text class="text-center" style="position:relative; top:45%">
             <v-btn class="mx-auto" color="deep-purple lighten-2" style="color:white">Show more</v-btn>
           </v-card-text>
@@ -75,13 +67,13 @@ export default {
   mounted() {
     api.getBooksByGenre("horror").then(response => {
       this.horror = response.data.data.books.slice(0, 5);
-      return api.getBooksByGenre("comedy");
+      api.getBooksByGenre("comedy")
     }).then(response => {
       this.comedy = response.data.data.books.slice(0, 5);
-      return api.getBooksByGenre("drama");
+      api.getBooksByGenre("drama");
     }).then(response => {
       this.drama = response.data.data.books.slice(0, 5);
-      return api.getBooksByGenre("action");
+      api.getBooksByGenre("action");
     }).then(response => {
       this.action = response.data.data.books.slice(0, 5);
     });

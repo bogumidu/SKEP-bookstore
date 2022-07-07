@@ -24,14 +24,14 @@
             </v-col>
             <v-col>
               <v-card-actions class="justify-end">
-                <v-btn
-                    color="deep-purple lighten-2 float-right"
-                    text
-                >
+                <v-btn color="deep-purple lighten-2 float-right" text>
                   <v-icon left>
                     mdi-cart
                   </v-icon>
                   Add to cart
+                </v-btn>
+                <v-btn color="deep-purple lighten-2 float-right" text @click="$router.push('/book/' + book.id)">
+                  Details
                 </v-btn>
               </v-card-actions>
             </v-col>
@@ -60,7 +60,7 @@ export default {
     });
   },
   created() {
-    this.$watch( () => this.$route.params.query, () => {
+    this.$watch(() => this.$route.params.query, () => {
       api.searchBooks(this.$route.params.query).then(response => {
         this.books = response.data.data.books;
       });
