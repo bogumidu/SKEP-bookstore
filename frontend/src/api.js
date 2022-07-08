@@ -60,11 +60,11 @@ export default {
         })
     },
     // Books
-    createBook(title, description, creationDate, price, authorId) {
+    createBook(title, description, genre, price, authorId) {
         return AXIOS.post(`/book`, JSON.stringify({
             'title': title,
             'description': description,
-            'creationDate': creationDate,
+            'genre': genre,
             'price': price,
             'author': {
                 'id': authorId
@@ -164,9 +164,19 @@ export default {
         })
     },
     updateOrder(id, status) {
-        return AXIOS.patch(`/order/${id}`, JSON.stringify({
-            'status': status
-        }), {
+        return AXIOS.patch(`/order/${id}?status=${status}`, null, {
+            withCredentials: true,
+            headers: {'Content-Type': 'application/json'}
+        })
+    },
+    getAllOrders() {
+        return AXIOS.get(`/order/all`, {
+            withCredentials: true,
+            headers: {'Content-Type': 'application/json'}
+        })
+    },
+    getAllUserOrders(userId) {
+        return AXIOS.get(`/order/user/${userId}`, {
             withCredentials: true,
             headers: {'Content-Type': 'application/json'}
         })

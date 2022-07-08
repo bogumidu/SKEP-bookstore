@@ -7,7 +7,8 @@ import store from '@/store'
 import BookDetails from "@/page/BookDetails";
 import Register from "@/page/Register";
 import Login from "@/page/Login";
-import Cart from "./page/Cart";
+import Cart from "@/page/Cart";
+import AdminPanel from "@/page/AdminPanel";
 
 Vue.use(Router);
 
@@ -28,6 +29,7 @@ const router = new Router({
 
         {path: '/cart', name: 'cart', component: Cart, meta: {requiresAuth: true}},
 
+        {path: '/admin', name: 'admin', component: AdminPanel, meta: {requiresAuth: true}}
 
     ]
 });

@@ -18,9 +18,10 @@ public class OrderDTO {
     private List<OrderedBookDTO> cart;
     private OrderStatus orderStatus;
     private int total;
+    private long creationDate;
 
     public static OrderDTO fromEntity(Order order) {
-        return new OrderDTO(order.getId(), order.getProduct().stream().map(OrderedBookDTO::fromEntity).collect(Collectors.toList()), order.getStatus(), order.getTotal());
+        return new OrderDTO(order.getId(), order.getProduct().stream().map(OrderedBookDTO::fromEntity).collect(Collectors.toList()), order.getStatus(), order.getTotal(), order.getCreationDate());
     }
 
 }

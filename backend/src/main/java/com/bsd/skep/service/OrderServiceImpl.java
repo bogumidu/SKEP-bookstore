@@ -10,8 +10,10 @@ import com.bsd.skep.repository.BookRepository;
 import com.bsd.skep.repository.OrderRepository;
 import com.bsd.skep.repository.OrderedBookRepository;
 import com.bsd.skep.util.OrderStatus;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -66,5 +68,23 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order getOrder(UUID orderId) {
         return orderRepository.findById(orderId).orElseThrow();
+    }
+
+    @Override
+    public List<Order> getAllOrders() {
+        List<Order> orders = (List<Order>) orderRepository.findAll();
+        if (orders.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Orders not found");
+        }
+        return orders;
+    }
+
+    @Override
+    public List<Order> findOrdersByUserId(UUID userId) {
+        List<Order> orders = orderRepository.findByUserId(userId);
+        if (orders.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Orders not found");
+        }
+        return orders;
     }
 }

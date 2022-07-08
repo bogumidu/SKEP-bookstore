@@ -20,7 +20,7 @@ public class AuthorController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/")
+    @PostMapping()
     public ApiResponse<AuthorDTO> createAuthor(@RequestBody AuthorDTO authorDTO) {
         return new ApiResponse<>(AuthorDTO.fromEntity(authorService.createAuthor(authorDTO)));
     }
@@ -32,7 +32,7 @@ public class AuthorController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/")
+    @GetMapping()
     public ApiResponse<AuthorListDTO> getAllAuthors() {
         return new ApiResponse<>(AuthorListDTO.fromList(authorService.getAllAuthors()));
     }

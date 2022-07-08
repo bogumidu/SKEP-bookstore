@@ -2,6 +2,7 @@ package com.bsd.skep.controller;
 
 import com.bsd.skep.model.ApiResponse;
 import com.bsd.skep.model.OrderDTO;
+import com.bsd.skep.model.OrderListDTO;
 import com.bsd.skep.service.OrderService;
 import com.bsd.skep.util.OrderStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +34,17 @@ public class OrderController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<OrderDTO> updateOrderStatus(@PathVariable("id") UUID id, @RequestParam OrderStatus status) {
         return new ApiResponse<>(OrderDTO.fromEntity(orderService.updateOrderStatus(id, status)));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/all")
+    public ApiResponse<OrderListDTO> getAllOrders() {
+        return new ApiResponse<>(OrderListDTO.fromList(orderService.getAllOrders()));
+    }
+
+    @GetMapping("/user/{id}")
+    public ApiResponse<OrderListDTO> getOrdersByUserId(@PathVariable("id") UUID id) {
+        return new ApiResponse<>(OrderListDTO.fromList(orderService.findOrdersByUserId(id)));
     }
 
 }
