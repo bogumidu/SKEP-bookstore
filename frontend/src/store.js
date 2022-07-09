@@ -6,8 +6,6 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         user: null,
-        subscription: null,
-        categories: []
     },
     mutations: {
         user(state, user){

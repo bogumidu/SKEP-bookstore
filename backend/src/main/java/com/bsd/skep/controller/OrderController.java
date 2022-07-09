@@ -1,11 +1,13 @@
 package com.bsd.skep.controller;
 
+import com.bsd.skep.entity.User;
 import com.bsd.skep.model.ApiResponse;
 import com.bsd.skep.model.OrderDTO;
 import com.bsd.skep.model.OrderListDTO;
 import com.bsd.skep.service.OrderService;
 import com.bsd.skep.util.OrderStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -42,9 +44,9 @@ public class OrderController {
         return new ApiResponse<>(OrderListDTO.fromList(orderService.getAllOrders()));
     }
 
-    @GetMapping("/user/{id}")
-    public ApiResponse<OrderListDTO> getOrdersByUserId(@PathVariable("id") UUID id) {
-        return new ApiResponse<>(OrderListDTO.fromList(orderService.findOrdersByUserId(id)));
+    @GetMapping("/user")
+    public ApiResponse<OrderListDTO> getOrdersByUserId() {
+        return new ApiResponse<>(OrderListDTO.fromList(orderService.findOrdersByUserId(((User) SecurityContextHolder.getContext().getAuthentication().getDetails()).getId())));
     }
 
 }

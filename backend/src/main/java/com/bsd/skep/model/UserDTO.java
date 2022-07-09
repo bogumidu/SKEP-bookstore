@@ -9,10 +9,12 @@ import lombok.Setter;
 public class UserDTO {
 
     private String username;
+    private String type;
 
     public static UserDTO fromUser(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.username = user.getUsername();
+        userDTO.type = user.getRole();
         return userDTO;
     }
 

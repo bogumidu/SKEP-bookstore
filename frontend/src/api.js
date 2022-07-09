@@ -137,7 +137,7 @@ export default {
                 headers: {'Content-Type': 'application/json'}
             })
         }
-        return AXIOS.get(`/book?query=${encodeURIComponent(query + '~4 OR author:' + query + '~4 OR ' + query + '* OR author:' + query + '*')}`, {
+        return AXIOS.get(`/book?query=${encodeURIComponent(query)}`, {
             withCredentials: true,
             headers: {'Content-Type': 'application/json'}
         })
@@ -175,8 +175,8 @@ export default {
             headers: {'Content-Type': 'application/json'}
         })
     },
-    getAllUserOrders(userId) {
-        return AXIOS.get(`/order/user/${userId}`, {
+    getAllUserOrders() {
+        return AXIOS.get(`/order/user`, {
             withCredentials: true,
             headers: {'Content-Type': 'application/json'}
         })

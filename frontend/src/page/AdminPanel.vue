@@ -4,8 +4,13 @@
       Orders
     </h1>
     <v-data-table :headers="headersOrder" :items="orders" :items-per-page="10" class="elevation-1">
+      <template v-slot:item.creationDate="{ item }">
+        <span>{{ new Date(item.creationDate).toLocaleString() }}</span>
+      </template>
+      <template v-slot:item.total="{ item }">
+        <span>{{ (item.total / 100).toFixed(2) + ' PLN' }}</span>
+      </template>
       <template v-slot:item.actions="{ item }">
-        <!-- TODO: change select to pop up -->
         <v-select :items="ordersActions" v-model="item.status" :label="item.status"
                   @change="updateOrder(item.id, item.status)"></v-select>
       </template>
@@ -14,6 +19,12 @@
       Books
     </h1>
     <v-data-table :headers="headersBooks" :items="books" :items-per-page="10" class="elevation-1">
+      <template v-slot:item.price="{ item }">
+        <span>{{ (item.price / 100).toFixed(2) + ' PLN' }}</span>
+      </template>
+      <template v-slot:item.author="{ item }">
+        <span>{{ item.author.firstName + ' ' + item.author.lastName }}</span>
+      </template>
       <template v-slot:top>
         <v-toolbar flat>
           <v-dialog v-model="createBookDialog" width="500">
@@ -64,6 +75,9 @@
       Authors
     </h1>
     <v-data-table :headers="headersAuthors" :items="authors" :items-per-page="10" class="elevation-1">
+      <template v-slot:item.firstName="{ item }">
+        <span>{{ item.firstName + ' ' + item.lastName }}</span>
+      </template>
       <template v-slot:top>
         <v-toolbar flat>
           <v-dialog v-model="createAuthorDialog" width="500">
@@ -201,31 +215,17 @@ export default {
       bookAuthors: []
     };
   },
-  // TODO: ask for difference mounted() vs created()
   mounted() {
     api.getAllOrders().then(response => {
-      let orders = response.data.data.orders;
-      orders.forEach(order => {
-        order.creationDate = new Date(order.creationDate).toLocaleString();
-        order.total = (order.total / 100).toFixed(2) + ' PLN';
-      });
-      this.orders = orders;
+      this.orders = response.data.data.orders;
     }).then(() => {
       api.getAllBooks().then(response => {
-        let books = response.data.data.books;
-        books.forEach(book => {
-          book.price = (book.price / 100).toFixed(2) + ' PLN';
-          book.author = book.author.firstName + ' ' + book.author.lastName;
-        });
-        this.books = books;
+        this.books = response.data.data.books;
       }).then(() => {
         api.getAuthors().then(response => {
           let authors = response.data.data.authors;
-          authors.forEach(author => {
-            author.firstName = author.firstName + ' ' + author.lastName;
-          });
           this.authors = authors;
-          this.bookAuthors = authors.map(author => author.firstName);
+          this.bookAuthors = authors.map(author => author.firstName + ' ' + author.lastName);
         });
       });
     });
@@ -236,35 +236,33 @@ export default {
     },
     createBook() {
       let bookAuthorId = this.authors.find(author => author.firstName === this.bookAuthor).id;
-      api.createBook(this.bookTitle, this.bookDescription, this.bookGenre, this.bookPrice, bookAuthorId).then(response => {
-        let newBook = response.data.data;
-        newBook.price = (newBook.price / 100).toFixed(2) + ' PLN';
-        newBook.author = newBook.author.firstName + ' ' + newBook.author.lastName;
-        this.books.push(newBook);
-        this.bookTitle = '';
-        this.bookDescription = '';
-        this.bookGenre = '';
-        this.bookPrice = '';
-        this.bookAuthor = '';
-        this.createBookDialog = false;
-      })
-      .catch(error => {
-        console.log(error);
-      });
+      api.createBook(this.bookTitle, this.bookDescription, this.bookGenre, this.bookPrice, bookAuthorId)
+          .then(response => {
+            this.books.push(response.data.data);
+            this.bookTitle = '';
+            this.bookDescription = '';
+            this.bookGenre = '';
+            this.bookPrice = '';
+            this.bookAuthor = '';
+            this.createBookDialog = false;
+          })
+          .catch(error => {
+            console.log(error);
+          });
     },
     createAuthor() {
-      api.createAuthor(this.authorFirstname, this.authorLastname).then(response => {
-        let newAuthor = response.data.data;
-        newAuthor.firstName = newAuthor.firstName + ' ' + newAuthor.lastName;
-        this.authors.push(newAuthor);
-        this.bookAuthors.push(newAuthor.firstName);
-        this.authorFirstname = '';
-        this.authorLastname = '';
-        this.createAuthorDialog = false;
-      })
-      .catch(error => {
-        console.log(error);
-      });
+      api.createAuthor(this.authorFirstname, this.authorLastname)
+          .then(response => {
+            let newAuthor = response.data.data;
+            this.authors.push(newAuthor);
+            this.bookAuthors.push(newAuthor.firstName + ' ' + newAuthor.lastName);
+            this.authorFirstname = '';
+            this.authorLastname = '';
+            this.createAuthorDialog = false;
+          })
+          .catch(error => {
+            console.log(error);
+          });
     }
   }
 }

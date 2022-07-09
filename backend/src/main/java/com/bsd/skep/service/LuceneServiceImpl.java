@@ -69,6 +69,9 @@ public class LuceneServiceImpl implements LuceneService {
             return (List<Book>) bookRepository.findAllById(ids);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>(0);
         }
     }
 

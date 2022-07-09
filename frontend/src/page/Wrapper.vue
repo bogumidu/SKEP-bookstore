@@ -9,15 +9,15 @@
       </v-toolbar-items>
       <v-toolbar-items>
         <v-text-field class="secondary pt-3 pl-4" single-line v-model="query" label="Search"></v-text-field>
-        <v-btn icon class="secondary" :to="{name: 'search', params: {query: query}}">
+        <v-btn icon class="secondary" @click="$router.push({name: 'search', params: {query: createQuery(query)}})">
           <v-icon>mdi-magnify</v-icon>
         </v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
+      <v-btn icon @click="$router.push('/cart')">
+        <v-icon>mdi-cart</v-icon>
+      </v-btn>
       <v-toolbar-items v-if="!authenticated">
-        <v-btn icon @click="$router.push('/cart')">
-          <v-icon>mdi-cart</v-icon>
-        </v-btn>
         <v-btn text class="menu-btn" @click="$router.push('/register')">
           Register
         </v-btn>
@@ -26,10 +26,7 @@
         </v-btn>
       </v-toolbar-items>
       <v-toolbar-items v-else-if="authenticated">
-        <v-btn icon @click="$router.push('*')">
-          <v-icon>mdi-cart</v-icon>
-        </v-btn>
-        <v-btn text class="menu-btn secondary" @click="$router.push('/')">
+        <v-btn text class="menu-btn secondary" @click="$router.push('/order')">
           My orders
         </v-btn>
         <v-btn text class="menu-btn" @click="logout">
@@ -60,6 +57,7 @@
 
 <script>
 import api from "../api";
+import Lucene from "../lucene";
 
 export default {
   components: {},
@@ -85,6 +83,9 @@ export default {
         this.$router.push('/');
       }
       this.$store.commit('no_user');
+    },
+    createQuery(query) {
+      return Lucene.createQueryAll(query);
     }
   },
   computed: {
