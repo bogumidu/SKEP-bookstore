@@ -9,15 +9,7 @@
  - terminal of choice
  - postman/insomnia
 
-Open terminal in base directory and run command `./run.sh`. Site will be running on localhost. Admin user will be necessary to create Authors, Books and to manage orders. To create admin user first create normal user via `localhost/register` and then use request in postman to promote user to admin with "magic" displayed on spring server run terminal.
-
-##### Magic example:
-
-
-
-##### Request:
-
-`http://localhost:80/api/auth/role?username=<username>&role=ADMIN&magic=<magic>`
+Open terminal in base directory and run command `./run.sh`. Site will be running on localhost.
 
 ### 1.2. Install with InteliJ
 
@@ -25,13 +17,25 @@ First create mySQL database (using Wampserver or similar service) and link it to
 
 Run applications should look like this:
 
-
+![idea64_9Q8jgYkBfd](https://user-images.githubusercontent.com/84717819/178144720-b6d6cf43-1801-4f6e-a68e-7b0dae8166ff.png)
 
 - BASE_URL is main url app will be using
 - DATASOURCE_PASSWORD is password to created mySQL database
 - DATASOURCE_URL is url to mySQL database
 - DATASOURCE_USERNAME is username to created mySQL database
 - PORT is port app will be using
+
+### 1.3. Create admin user:
+
+ Admin user will be necessary to create Authors, Books and to manage orders. To create admin user first create normal user via `localhost/register` and then use request in postman to promote user to admin with "magic" displayed on spring server run terminal.
+
+##### Magic example:
+
+![3EpK58zz3j](https://user-images.githubusercontent.com/84717819/178144705-45125eac-ddde-4a75-a692-615dd1001899.png)
+
+##### Request:
+
+`http://localhost:80/api/auth/role?username=<username>&role=ADMIN&magic=<magic>`
 
 ## 2. Functionality
 
