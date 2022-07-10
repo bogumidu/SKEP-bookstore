@@ -63,6 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(("h2-console/**")).permitAll()
                 .antMatchers("/api/auth/login", "/api/auth/register", "/api/auth/role").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/order/*", "/api/book/list/*", "/api/book/genre/*", "/api/book/*", "/api/book").permitAll()
+                .antMatchers(HttpMethod.GET, "/", "/index.html", "/favicon.ico", "/static/js/**", "/static/css/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

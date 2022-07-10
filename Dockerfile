@@ -1,1 +1,1 @@
-FROM 3.8.4-openjdk-11
+FROM openjdk:11
