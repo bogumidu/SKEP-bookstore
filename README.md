@@ -35,7 +35,7 @@ Run applications should look like this:
 
 ##### Request:
 
-`http://localhost:80/api/auth/role?username=<username>&role=ADMIN&magic=<magic>`
+`http://localhost/api/auth/role?username=<username>&role=ADMIN&magic=<magic>`
 
 ## 2. Functionality
 
